@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="32" fill="#29321f"></rect>
+
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#c8a761" stroke-width="2"></circle>
+
+  <text x="32" y="29" fill="#f7f0e2" font-family="Georgia, serif" font-size="14" font-weight="bold" text-anchor="middle">
+    IOM
+  </text>
+
+  <text x="32" y="44" fill="#c8a761" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">
+    '26
+  </text>
+</svg>

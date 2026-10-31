@@ -1,0 +1,52 @@
+:root {
+  --curtain-burgundy: #681c2a;
+  --curtain-burgundy-dark: #310810;
+  --curtain-burgundy-mid: #4d101c;
+  --curtain-gold: #bf9b54;
+  --curtain-gold-light: #e0c57e;
+  --curtain-ivory: #fff8ed;
+}
+
+.curtain-reveal { position: relative; min-height: 100svh; overflow: hidden; isolation: isolate; background: #1c0d10; color: var(--curtain-ivory); }
+.curtain-reveal__glimpse { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 13px; background: radial-gradient(circle at center, #5b1723, #1c0d10 70%); text-align: center; }
+.curtain-reveal__glimpse span { color: var(--curtain-gold-light); font: 500 clamp(42px, 8vw, 90px)/1 "Cormorant Garamond", Georgia, serif; letter-spacing: .12em; }
+.curtain-reveal__glimpse p { margin: 0; color: rgba(255,255,255,.7); font-size: 10px; letter-spacing: .25em; text-transform: uppercase; }
+.curtain-reveal__curtain { position: absolute; z-index: 2; inset: 0; display: grid; grid-template-columns: 1fr 1fr; pointer-events: none; }
+.curtain-reveal__panel { position: relative; overflow: hidden; background-color: var(--curtain-burgundy-mid); background-image: radial-gradient(ellipse at 50% -8%, rgba(255,255,255,.16), transparent 48%), repeating-linear-gradient(90deg, #330811 0 4%, #5d1724 9%, #7a2633 14%, #4a0e1a 20%, #6c1b29 26%); background-size: 100% 100%, 230px 100%; box-shadow: inset 0 0 80px rgba(0,0,0,.52); transition: transform 1.4s cubic-bezier(.76,0,.2,1), filter 1.2s ease; will-change: transform; }
+.curtain-reveal__panel::before { position: absolute; inset: 0; opacity: .48; background: linear-gradient(90deg, rgba(0,0,0,.52), transparent 22%, rgba(255,255,255,.08) 50%, transparent 72%, rgba(0,0,0,.45)); content: ""; }
+.curtain-reveal__panel--left { transform-origin: left center; box-shadow: inset -38px 0 55px rgba(0,0,0,.38); }
+.curtain-reveal__panel--right { transform-origin: right center; box-shadow: inset 38px 0 55px rgba(0,0,0,.38); }
+.curtain-reveal__valance { position: absolute; top: 0; left: 0; width: 100%; height: 12vh; background: linear-gradient(180deg, #2b060d, #5b1421 58%, #3a0913); box-shadow: 0 14px 30px rgba(0,0,0,.38); clip-path: polygon(0 0,100% 0,100% 70%,94% 84%,88% 70%,82% 84%,76% 70%,70% 84%,64% 70%,58% 84%,52% 70%,46% 84%,40% 70%,34% 84%,28% 70%,22% 84%,16% 70%,10% 84%,4% 70%,0 84%); }
+.curtain-reveal__content { position: absolute; z-index: 4; top: 27%; left: 50%; width: min(90%, 690px); transform: translateX(-50%); padding: 25px 22px; background: radial-gradient(ellipse at center, rgba(68,13,24,.9) 0%, rgba(68,13,24,.72) 57%, transparent 78%); text-align: center; transition: opacity .35s ease, transform .7s ease; }
+.curtain-reveal__content p { margin: 0 0 15px; color: var(--curtain-gold-light); font-size: 9px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; }
+.curtain-reveal__content h1 { margin: 0; font-family: "Cormorant Garamond", Georgia, serif; font-size: clamp(48px, 6vw, 78px); font-weight: 400; line-height: .83; letter-spacing: -.025em; }
+.curtain-reveal__pull { --drag-distance: 0px; position: absolute; z-index: 5; top: 0; left: 50%; width: 112px; height: 100%; transform: translateX(-50%); border: 0; padding: 0; background: transparent; color: inherit; cursor: grab; touch-action: none; user-select: none; }
+.curtain-reveal__pull:active { cursor: grabbing; }
+.curtain-reveal__pull:disabled { cursor: default; }
+.curtain-reveal__pull:focus-visible { outline: 2px solid var(--curtain-ivory); outline-offset: -7px; border-radius: 60px; }
+.curtain-reveal__cord { position: absolute; top: 55%; left: 50%; width: 2px; height: calc(8% + var(--drag-distance)); transform: translateX(-50%); background: linear-gradient(var(--curtain-gold), var(--curtain-gold-light), var(--curtain-gold)); box-shadow: 0 0 7px rgba(191,155,84,.42); }
+.curtain-reveal__cord::before { position: absolute; top: -4px; left: 50%; width: 8px; height: 8px; transform: translateX(-50%); border-radius: 50%; background: var(--curtain-gold-light); box-shadow: 0 0 0 4px rgba(191,155,84,.12); content: ""; }
+.curtain-reveal__seal { position: absolute; top: calc(63% + var(--drag-distance)); left: 50%; width: 78px; height: 78px; display: grid; place-content: center; transform: translate(-50%, -50%) rotate(-4deg); border: 1px solid #a44a58; border-radius: 50%; background: radial-gradient(circle at 35% 25%, #9c4050, var(--curtain-burgundy) 56%, #2d060d); box-shadow: 0 15px 30px rgba(0,0,0,.38), inset 0 0 0 6px rgba(49,8,16,.18); color: var(--curtain-gold-light); }
+.curtain-reveal__seal::before { position: absolute; inset: 7px; border: 1px solid rgba(224,197,126,.38); border-radius: 50%; content: ""; }
+.curtain-reveal__seal i { font: italic 16px/1 "Cormorant Garamond", Georgia, serif; letter-spacing: .08em; }
+.curtain-reveal__seal small { margin-top: 4px; font: 500 10px/1 "Montserrat", Arial, sans-serif; letter-spacing: .12em; }
+.curtain-reveal__instruction { --drag-distance: 0px; position: absolute; z-index: 5; top: calc(72% + var(--drag-distance)); left: 50%; width: max-content; max-width: 80vw; transform: translateX(-50%); margin: 0; color: var(--curtain-gold-light); font-size: 9px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; transition: opacity .3s ease; }
+.curtain-reveal__skip { position: absolute; z-index: 6; right: clamp(18px, 3vw, 42px); bottom: clamp(18px, 3vw, 34px); border: 0; border-bottom: 1px solid rgba(255,255,255,.45); padding: 5px 0; background: transparent; color: rgba(255,255,255,.66); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
+.curtain-reveal--open .curtain-reveal__panel--left { transform: translateX(-103%) scaleX(.86); filter: brightness(.72); }
+.curtain-reveal--open .curtain-reveal__panel--right { transform: translateX(103%) scaleX(.86); filter: brightness(.72); }
+.curtain-reveal--open .curtain-reveal__valance { transform: translateY(-110%); transition: transform 1s .15s ease; }
+.curtain-reveal--open .curtain-reveal__content { opacity: 0; transform: translate(-50%,-18px); }
+.curtain-reveal--open .curtain-reveal__pull, .curtain-reveal--open .curtain-reveal__instruction, .curtain-reveal--open .curtain-reveal__skip { opacity: 0; pointer-events: none; transition: opacity .35s ease; }
+
+@media (max-width: 600px) {
+  .curtain-reveal__valance { height: 10vh; }
+  .curtain-reveal__content { top: 23%; }
+  .curtain-reveal__content h1 { font-size: clamp(48px, 15vw, 67px); }
+  .curtain-reveal__cord { top: 54%; height: calc(10% + var(--drag-distance)); }
+  .curtain-reveal__seal { top: calc(64% + var(--drag-distance)); width: 72px; height: 72px; }
+  .curtain-reveal__instruction { top: calc(74% + var(--drag-distance)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .curtain-reveal__panel, .curtain-reveal__valance, .curtain-reveal__content { transition-duration: .01ms; }
+}
