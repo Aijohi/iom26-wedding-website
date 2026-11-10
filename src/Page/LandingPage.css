@@ -837,6 +837,8 @@ body.modal-is-open, body.menu-is-open { overflow: hidden; }
 }
 
 @media (max-width: 800px) {
+  .wedding-modal__card--story { overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+
   .modal-story { min-height: 0; grid-template-columns: 1fr; }
 
   .modal-story__visual { min-height: 340px; max-height: 44svh; }
