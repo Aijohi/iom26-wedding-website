@@ -746,11 +746,32 @@ function LandingPage() {
       </footer>
 
       {modal === "story" && (
-        <Modal label="Our story" title="The story that brought us here" onClose={() => setModal(null)}>
+        <Modal
+          label="Our story"
+          title="The story that brought us here"
+          onClose={() => setModal(null)}
+          className="wedding-modal__card--story"
+        >
           <div className="modal-story">
-            <p>Some stories begin with a grand moment. Theirs began simply, with an easy conversation and the quiet feeling that something beautiful had just started.</p>
-            <p>Friendship became partnership, laughter became a language of its own, and each new season gave them another reason to choose one another. Their relationship has been shaped by faith, patience, family and a shared hope for the future.</p>
-            <p>On 12 December 2026, they will make that choice before God and their families. This is not only the celebration of a wedding. It is the beginning of the home they have prayed for.</p>
+            <div className="modal-story__visual">
+              <img src="/images/iom26-story.png" alt="An intimate moment between Omonzele and Ikponmwenosa" />
+              <div>
+                <span>IOM’26</span>
+                <small>A friendship written with grace</small>
+              </div>
+            </div>
+            <div className="modal-story__content">
+              <p className="section-eyebrow">Our story</p>
+              <h2>The story that brought us here</h2>
+              <p className="modal-story__opening">Some stories begin quietly, and then become everything.</p>
+              <p>What began with an easy conversation grew into a love rooted in friendship, faith, laughter and the quiet certainty that they had found home in one another.</p>
+              <p>Through every season, they kept choosing each other. Patience became partnership, laughter became a language of its own, and their shared hope for the future became a life they could build together.</p>
+              <p>On 12 December 2026, surrounded by God and the people they love, Omonzele and Ikponmwenosa will begin their favourite chapter yet.</p>
+              <div className="modal-story__ending">
+                <span>12 · 12 · 2026</span>
+                <strong>Together, by grace, forever.</strong>
+              </div>
+            </div>
           </div>
         </Modal>
       )}
