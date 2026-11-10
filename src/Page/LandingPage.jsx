@@ -2,8 +2,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "../lib/supabase";
 import "./LandingPage.css";
 
-const WEDDING_DATE = new Date("2026-12-12T10:00:00+01:00");
-const RESERVATION_URL = "https://omo-and-ik-2026.vercel.app/";
+const WEDDING_DATE = new Date("2026-12-12T13:00:00+01:00");
+const MEMORIES_DRIVE_URL = "https://drive.google.com/drive/folders/1OtZWn0l94uiA3zv0uprX22LVrccKKYna";
+const MAP_URL = "https://www.google.com/maps/search/?api=1&query=Emi%27s+Event+Center%2C+INEC+Road%2C+Yenagoa%2C+Bayelsa+State";
+const CALENDAR_URL = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Omonzele%20%26%20Ikponmwenosa%27s%20Wedding&dates=20261212T120000Z%2F20261212T180000Z&details=Join%20us%20as%20we%20celebrate%20the%20beginning%20of%20Omonzele%20and%20Ikponmwenosa%27s%20life%20together.&location=Emi%27s%20Event%20Center%2C%20INEC%20Road%2C%20Yenagoa%2C%20Bayelsa%20State";
 const MAX_WISH_WORDS = 80;
 const MIN_WISH_WORDS = 5;
 const GALLERY_PAGE_SIZE = 6;
@@ -21,6 +23,30 @@ const galleryImages = [
   { src: "/images/iom26-prewedding-10.jpg", alt: "The couple celebrating their love" },
   { src: "/images/iom26-prewedding-11.jpg", alt: "A joyful portrait before forever" },
   { src: "/images/iom26-prewedding-12.jpg", alt: "Omonzele and Ikponmwenosa before their wedding" },
+];
+
+const faqItems = [
+  {
+    question: "When is the wedding celebration?",
+    answer: "Saturday, 12 December 2026. The celebration begins at 1:00 PM.",
+  },
+  {
+    question: "Where is the venue?",
+    answer: "Emi’s Event Center, INEC Road, Yenagoa, Bayelsa State.",
+    action: "map",
+  },
+  {
+    question: "What are the colours of the day?",
+    answer: "Burgundy, beige and olive green. Guests are welcome to dress elegantly within this palette.",
+  },
+  {
+    question: "How do I RSVP?",
+    answer: "For attendance questions or changes, contact Omorede on 0802 850 9311, Aijohi on 0703 978 4348, or Isoken on 0703 246 2632.",
+  },
+  {
+    question: "Can I leave a message for the couple?",
+    answer: "Yes. Use the Wedding Wishes section to leave a prayer, memory or loving note for Omonzele and Ikponmwenosa.",
+  },
 ];
 
 const getCountdown = () => {
@@ -94,6 +120,7 @@ function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [navScrolled, setNavScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [openFaq, setOpenFaq] = useState(0);
   const [modal, setModal] = useState(null);
   const [activePhoto, setActivePhoto] = useState(null);
   const [galleryPage, setGalleryPage] = useState(1);
@@ -127,15 +154,17 @@ function LandingPage() {
   }, []);
 
   useEffect(() => {
-    const sectionIds = ["story", "details", "moments", "wishes", "memories"];
+    const sectionIds = ["story", "details", "moments", "wishes", "faq", "memories"];
 
     const updateActiveSection = () => {
-      const marker = window.scrollY + 180;
+      const marker = Math.min(window.innerHeight * 0.45, 420);
       let currentSection = "";
 
       sectionIds.forEach((sectionId) => {
         const section = document.getElementById(sectionId);
-        if (section && section.offsetTop <= marker) currentSection = sectionId;
+        if (!section) return;
+        const bounds = section.getBoundingClientRect();
+        if (bounds.top <= marker && bounds.bottom > marker) currentSection = sectionId;
       });
 
       setActiveSection(currentSection);
@@ -312,9 +341,18 @@ function LandingPage() {
             <a className={activeSection === "details" ? "is-active" : ""} href="#details" onClick={closeMenu} aria-current={activeSection === "details" ? "page" : undefined}>The day</a>
             <a className={activeSection === "moments" ? "is-active" : ""} href="#moments" onClick={closeMenu} aria-current={activeSection === "moments" ? "page" : undefined}>Gallery</a>
             <a className={activeSection === "wishes" ? "is-active" : ""} href="#wishes" onClick={closeMenu} aria-current={activeSection === "wishes" ? "page" : undefined}>Wishes</a>
+            <a className={activeSection === "faq" ? "is-active" : ""} href="#faq" onClick={closeMenu} aria-current={activeSection === "faq" ? "page" : undefined}>FAQ</a>
             <a className={activeSection === "memories" ? "is-active" : ""} href="#memories" onClick={closeMenu} aria-current={activeSection === "memories" ? "page" : undefined}>Memories</a>
-            <a className="hero__reservation-link" href={RESERVATION_URL} target="_blank" rel="noreferrer">
-              Reservation
+            <a
+              className="hero__reservation-link"
+              href="#wishes"
+              onClick={(event) => {
+                event.preventDefault();
+                closeMenu();
+                openWishModal();
+              }}
+            >
+              Leave a message
             </a>
           </div>
         </nav>
@@ -332,8 +370,15 @@ function LandingPage() {
               </div>
             ))}
           </div>
-          <a className="button button--ivory" href={RESERVATION_URL} target="_blank" rel="noreferrer">
-            Reserve your place
+          <a
+            className="button button--ivory"
+            href="#wishes"
+            onClick={(event) => {
+              event.preventDefault();
+              openWishModal();
+            }}
+          >
+            Leave a message
           </a>
         </div>
         <a className="hero__scroll" href="#welcome" aria-label="Continue to the welcome message">
@@ -384,9 +429,9 @@ function LandingPage() {
         <p className="section-eyebrow">Two families, one promise</p>
         <h2>With joyful hearts</h2>
         <div className="family-banner__names">
-          <div><span>The family of</span><strong>[Bride’s parents]</strong></div>
+          <div><span>The family of</span><strong>Mr. &amp; Mrs. Daniel Ohani<br />Ihimire</strong></div>
           <div className="family-banner__and">&amp;</div>
-          <div><span>The family of</span><strong>[Groom’s parents]</strong></div>
+          <div><span>The family of</span><strong>Late Mr. &amp; Mrs. Benson Erhunse Ediagbonya</strong></div>
         </div>
         <p>celebrate the marriage of</p>
         <h3>Omonzele <small>and</small> Ikponmwenosa</h3>
@@ -411,8 +456,8 @@ function LandingPage() {
             Save this day for love, laughter and the beginning of a beautiful new chapter.
             We cannot wait to share it with the people who have shaped our story.
           </p>
-          <a className="text-button" href={RESERVATION_URL} target="_blank" rel="noreferrer">
-            View your invitation <span aria-hidden="true">→</span>
+          <a className="text-button" href={CALENDAR_URL} target="_blank" rel="noreferrer">
+            Add wedding to calendar <span aria-hidden="true">→</span>
           </a>
         </div>
       </section>
@@ -435,20 +480,20 @@ function LandingPage() {
             <span className="detail-card__number">02</span>
             <p className="detail-card__label">The celebration</p>
             <h3>Celebrate With Us</h3>
-            <p>Reservation information and guest details are available on our dedicated invitation page.</p>
-            <a className="button button--burgundy" href={RESERVATION_URL} target="_blank" rel="noreferrer">
-              Open reservation
+            <p>Find the confirmed venue, time, colours and helpful information for the celebration.</p>
+            <a className="button button--burgundy" href="#faq">
+              View guest information
             </a>
           </article>
           <article className="detail-card detail-card--palette" data-reveal>
             <span className="detail-card__number">03</span>
             <p className="detail-card__label">Dress palette</p>
             <h3>Rich, Warm &amp; Elegant</h3>
-            <div className="colour-dots" aria-label="Burgundy, champagne and chocolate">
+            <div className="colour-dots" aria-label="Burgundy, beige and olive green">
               <i /><i /><i />
             </div>
-            <strong>Burgundy · Champagne · Chocolate</strong>
-            <span className="detail-card__note">Final dress guidance will be added here.</span>
+            <strong>Burgundy · Beige · Olive Green</strong>
+            <span className="detail-card__note">The official colours of the day.</span>
           </article>
         </div>
       </section>
@@ -461,13 +506,11 @@ function LandingPage() {
         <div className="reception-editorial__copy">
           <p className="section-eyebrow">The celebration</p>
           <h2>A room dressed for<br />joyful hearts</h2>
-          <p>
-            Candlelight, beautiful details, good food and the warmth of everyone we love—
-            a reception created to feel intimate, timeless and full of life.
-          </p>
-          <a className="button button--burgundy" href={RESERVATION_URL} target="_blank" rel="noreferrer">
-            Reservation details
-          </a>
+          <p>Join us at Emi’s Event Center, INEC Road, Yenagoa, Bayelsa State. The celebration begins at 1:00 PM.</p>
+          <div className="reception-editorial__actions">
+            <a className="button button--burgundy" href={MAP_URL} target="_blank" rel="noreferrer">Get directions</a>
+            <a className="text-button" href={CALENDAR_URL} target="_blank" rel="noreferrer">Add to calendar <span aria-hidden="true">→</span></a>
+          </div>
         </div>
       </section>
 
@@ -479,10 +522,10 @@ function LandingPage() {
         </div>
         <div className="programme__line" aria-hidden="true" />
         <div className="programme__items">
-          <article><span>01</span><h3>White Wedding</h3><p><strong>[Time]</strong><br />A private ceremony for the couple’s families.</p></article>
-          <article><span>02</span><h3>Guest Welcome</h3><p><strong>[Time]</strong><br />Arrival, warm greetings and beautiful reunions.</p></article>
-          <article><span>03</span><h3>Reception</h3><p><strong>[Time]</strong><br />Good food, joyful hearts and a room filled with love.</p></article>
-          <article><span>04</span><h3>Dance &amp; Merriment</h3><p><strong>[Time]</strong><br />Music, laughter and memories we will carry forever.</p></article>
+          <article><span>01</span><h3>White Wedding</h3><p><strong>Private</strong><br />An intimate ceremony for the couple’s families.</p></article>
+          <article><span>02</span><h3>Guest Welcome</h3><p><strong>From 1:00 PM</strong><br />Arrival, warm greetings and beautiful reunions.</p></article>
+          <article><span>03</span><h3>Reception</h3><p><strong>Celebration</strong><br />Good food, joyful hearts and a room filled with love.</p></article>
+          <article><span>04</span><h3>Dance &amp; Merriment</h3><p><strong>Afterwards</strong><br />Music, laughter and memories we will carry forever.</p></article>
         </div>
       </section>
 
@@ -547,7 +590,14 @@ function LandingPage() {
       <section className="voices">
         <article className="voices__person voices__person--groom">
           <div className="voices__photo">
-            <img src="/images/iom26-groom.jpg" alt="Portrait representing Ikponmwenosa" />
+            <img
+              src="/images/iom26-groom-quote.jpg"
+              alt="An intimate portrait of Ikponmwenosa with Omonzele"
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = "/images/iom26-prewedding-03.jpg";
+              }}
+            />
           </div>
           <div className="voices__words" data-reveal>
             <p className="section-eyebrow">In his words</p>
@@ -557,7 +607,14 @@ function LandingPage() {
         </article>
         <article className="voices__person voices__person--bride">
           <div className="voices__photo">
-            <img src="/images/iom26-bride.jpg" alt="Portrait representing Omonzele" />
+            <img
+              src="/images/iom26-bride-quote.jpg"
+              alt="An intimate portrait of Omonzele with Ikponmwenosa"
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = "/images/iom26-prewedding-04.jpg";
+              }}
+            />
           </div>
           <div className="voices__words" data-reveal>
             <p className="section-eyebrow">In her words</p>
@@ -605,13 +662,63 @@ function LandingPage() {
 
       <section className="reservation-callout" data-reveal>
         <div>
-          <p className="section-eyebrow">Your invitation awaits</p>
-          <h2>Join us in celebration</h2>
-          <p>Use the dedicated reservation page to view the invitation details intended for you.</p>
+          <p className="section-eyebrow">Plan your day</p>
+          <h2>Everything you need, in one place</h2>
+          <p>Find the venue, save the date and review helpful guest information before the celebration.</p>
         </div>
-        <a className="button button--ivory" href={RESERVATION_URL} target="_blank" rel="noreferrer">
-          Go to reservation
+        <a className="button button--ivory" href="#faq">
+          View guest information
         </a>
+      </section>
+
+      <section className="faq section" id="faq">
+        <div className="faq__intro" data-reveal>
+          <p className="section-eyebrow">Before the day</p>
+          <h2>Everything you may wish to know</h2>
+          <p>Helpful details for celebrating with Omonzele and Ikponmwenosa.</p>
+          <div className="faq__quick-actions">
+            <a className="button button--burgundy" href={MAP_URL} target="_blank" rel="noreferrer">Open directions</a>
+            <a className="button button--outline-dark" href={CALENDAR_URL} target="_blank" rel="noreferrer">Add to calendar</a>
+          </div>
+        </div>
+        <div className="faq__letter">
+          <span className="faq__seal" aria-hidden="true">I&amp;O</span>
+          <div className="faq__list">
+            {faqItems.map((item, index) => {
+              const isOpen = openFaq === index;
+
+              return (
+              <article className={`faq__item ${isOpen ? "is-open" : ""}`} key={item.question}>
+                <button
+                  className="faq__question"
+                  type="button"
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${index}`}
+                  onClick={() => setOpenFaq(isOpen ? null : index)}
+                >
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  {item.question}
+                  <i aria-hidden="true" />
+                </button>
+                <div
+                  className="faq__answer"
+                  id={`faq-answer-${index}`}
+                  hidden={!isOpen}
+                >
+                  <p>{item.answer}</p>
+                  {item.action === "map" && <a href={MAP_URL} target="_blank" rel="noreferrer">View on Google Maps →</a>}
+                </div>
+              </article>
+              );
+            })}
+          </div>
+          <div className="faq__contacts">
+            <p className="section-eyebrow">RSVP contacts</p>
+            <a href="tel:+2348028509311">Omorede · 0802 850 9311</a>
+            <a href="tel:+2347039784348">Aijohi · 0703 978 4348</a>
+            <a href="tel:+2347032462632">Isoken · 0703 246 2632</a>
+          </div>
+        </div>
       </section>
 
       <section className="memories section" id="memories">
@@ -623,11 +730,11 @@ function LandingPage() {
         <div className="memories__choices">
           <article className="memory-card memory-card--view" data-reveal>
             <span>01</span>
-            <div><p className="section-eyebrow">For viewing</p><h3>Relive the celebration</h3><p>Find official photographs, videos and moments you may have missed.</p><a className="button button--ivory" href="https://drive.google.com" target="_blank" rel="noreferrer">View wedding memories</a></div>
+            <div><p className="section-eyebrow">For viewing</p><h3>Relive the celebration</h3><p>Find official photographs, videos and moments you may have missed.</p><a className="button button--ivory" href={MEMORIES_DRIVE_URL} target="_blank" rel="noreferrer">View wedding memories</a></div>
           </article>
           <article className="memory-card memory-card--upload" data-reveal>
             <span>02</span>
-            <div><p className="section-eyebrow">For sharing</p><h3>Add what you captured</h3><p>Share your photographs and videos so everyone can enjoy the day through your eyes.</p><a className="button button--outline" href="https://drive.google.com" target="_blank" rel="noreferrer">Upload photos &amp; videos</a><small>Uploads close on [closing date]</small></div>
+            <div><p className="section-eyebrow">For sharing</p><h3>Add what you captured</h3><p>Share your photographs and videos so everyone can enjoy the day through your eyes.</p><a className="button button--outline" href={MEMORIES_DRIVE_URL} target="_blank" rel="noreferrer">Upload photos &amp; videos</a><small>Google Drive access is required to upload files.</small></div>
           </article>
         </div>
       </section>
