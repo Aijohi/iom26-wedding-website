@@ -25,6 +25,108 @@ const galleryImages = [
   { src: "/images/iom26-prewedding-12.jpg", alt: "Omonzele and Ikponmwenosa before their wedding" },
 ];
 
+const orderOfDay = [
+  { title: "Live Band Starts Playing" },
+  { title: "Arrival of Guests", note: "Please be seated before noon" },
+  { title: "Welcoming of Guests by the MC" },
+  { title: "Opening Prayers" },
+  { title: "Recognition of High Table Guests" },
+  { title: "Cultural Dance Performance" },
+  { title: "Groom’s Family Entrance" },
+  { title: "Bride’s Family Entrance" },
+  { title: "Groom’s Entrance with Groomsmen" },
+  { title: "Welcome Speech & Opening Remarks", note: "By the Chairman" },
+  { title: "Bride’s Entrance with Bridesmaids & Aso-Ebi" },
+  { title: "Cultural Dance Performance" },
+  { title: "Serving of the Main Course" },
+  { title: "Bride and Groom’s Second Entrance" },
+  { title: "Toast & Cutting of the Cake" },
+  { title: "Couple’s Dance", note: "The couple’s moment" },
+  { title: "Pictures with Guests" },
+  { title: "Presentation of Gifts" },
+  { title: "Vote of Thanks" },
+  { title: "Closing" },
+  { title: "After Party", note: "Stay as long as you like" },
+];
+
+const vendors = [
+  {
+    category: "Wedding Creative Director & Designer",
+    name: "Aijohi",
+    socials: [
+      { label: "@aijohicreates", url: "https://www.instagram.com/aijohicreates/" },
+      { label: "@iamaijohi", url: "https://www.instagram.com/iamaijohi/" },
+    ],
+    image: "/images/i-am-aijohi-logo.svg",
+    initials: "I AM\nAIJOHI",
+    featured: true,
+    isLogo: true,
+  },
+  {
+    category: "Photography",
+    name: "Photography Partner",
+    socials: [],
+    image: "/images/iom26-vendor-01.jpg",
+    initials: "PH",
+  },
+  {
+    category: "Bridal Store",
+    name: "Bridal Style Partner",
+    socials: [],
+    image: "/images/iom26-vendor-02.jpg",
+    initials: "BS",
+  },
+  {
+    category: "Wedding Planning",
+    name: "Wedding Planning Partner",
+    socials: [],
+    image: "/images/iom26-vendor-03.jpg",
+    initials: "WP",
+  },
+  {
+    category: "Palm Wine Experience",
+    name: "Palm Wine Partner",
+    socials: [],
+    image: "/images/iom26-vendor-04.jpg",
+    initials: "PW",
+  },
+  {
+    category: "Makeup Artistry",
+    name: "Makeup Partner",
+    socials: [],
+    image: "/images/iom26-vendor-06.jpg",
+    initials: "MA",
+  },
+  {
+    category: "Hair Styling",
+    name: "Hair Styling Partner",
+    socials: [],
+    image: "/images/iom26-vendor-07.jpg",
+    initials: "HS",
+  },
+  {
+    category: "Catering",
+    name: "Catering Partner",
+    socials: [],
+    image: "/images/iom26-vendor-08.jpg",
+    initials: "CP",
+  },
+  {
+    category: "Décor & Florals",
+    name: "Décor Partner",
+    socials: [],
+    image: "/images/iom26-vendor-09.jpg",
+    initials: "DF",
+  },
+  {
+    category: "Music & Entertainment",
+    name: "Entertainment Partner",
+    socials: [],
+    image: "/images/iom26-vendor-10.jpg",
+    initials: "ME",
+  },
+];
+
 const faqItems = [
   {
     question: "When is the wedding celebration?",
@@ -154,7 +256,7 @@ function LandingPage() {
   }, []);
 
   useEffect(() => {
-    const sectionIds = ["story", "details", "moments", "wishes", "faq", "memories"];
+    const sectionIds = ["story", "details", "programme", "moments", "wishes", "faq", "vendors", "memories"];
 
     const updateActiveSection = () => {
       const marker = Math.min(window.innerHeight * 0.45, 420);
@@ -337,11 +439,13 @@ function LandingPage() {
             onClick={closeMenu}
           />
           <div className={`hero__links ${menuOpen ? "hero__links--open" : ""}`}>
-            <a className={activeSection === "story" ? "is-active" : ""} href="#story" onClick={closeMenu} aria-current={activeSection === "story" ? "page" : undefined}>Our story</a>
-            <a className={activeSection === "details" ? "is-active" : ""} href="#details" onClick={closeMenu} aria-current={activeSection === "details" ? "page" : undefined}>The day</a>
+            <a className={activeSection === "story" ? "is-active" : ""} href="#story" onClick={closeMenu} aria-current={activeSection === "story" ? "page" : undefined}>Story</a>
+            <a className={activeSection === "details" ? "is-active" : ""} href="#details" onClick={closeMenu} aria-current={activeSection === "details" ? "page" : undefined}>Day</a>
+            <a className={activeSection === "programme" ? "is-active" : ""} href="#programme" onClick={closeMenu} aria-current={activeSection === "programme" ? "page" : undefined}>Programme</a>
             <a className={activeSection === "moments" ? "is-active" : ""} href="#moments" onClick={closeMenu} aria-current={activeSection === "moments" ? "page" : undefined}>Gallery</a>
             <a className={activeSection === "wishes" ? "is-active" : ""} href="#wishes" onClick={closeMenu} aria-current={activeSection === "wishes" ? "page" : undefined}>Wishes</a>
             <a className={activeSection === "faq" ? "is-active" : ""} href="#faq" onClick={closeMenu} aria-current={activeSection === "faq" ? "page" : undefined}>FAQ</a>
+            <a className={activeSection === "vendors" ? "is-active" : ""} href="#vendors" onClick={closeMenu} aria-current={activeSection === "vendors" ? "page" : undefined}>Vendors</a>
             <a className={activeSection === "memories" ? "is-active" : ""} href="#memories" onClick={closeMenu} aria-current={activeSection === "memories" ? "page" : undefined}>Memories</a>
             <a
               className="hero__reservation-link"
@@ -352,7 +456,7 @@ function LandingPage() {
                 openWishModal();
               }}
             >
-              Leave a message
+              Message
             </a>
           </div>
         </nav>
@@ -514,18 +618,40 @@ function LandingPage() {
         </div>
       </section>
 
-      <section className="programme" data-reveal>
-        <div className="programme__heading">
-          <p className="section-eyebrow">A celebration in chapters</p>
-          <h2>The day unfolds</h2>
-          <p>The order of events for our wedding celebration.</p>
+      <section className="programme" id="programme" data-reveal>
+        <div className="programme__editorial">
+          <span className="programme__flourish" aria-hidden="true">✦</span>
+          <div className="programme__crest" aria-hidden="true"><span>I&amp;O</span></div>
+          <p className="section-eyebrow">The reception programme</p>
+          <h2>Order <em>of the</em> day</h2>
+          <p className="programme__script">A celebration told in beautiful moments.</p>
+          <div className="programme__information">
+            <span>Saturday</span>
+            <i aria-hidden="true" />
+            <strong>12 December 2026</strong>
+          </div>
         </div>
-        <div className="programme__line" aria-hidden="true" />
-        <div className="programme__items">
-          <article><span>01</span><h3>White Wedding</h3><p><strong>Private</strong><br />An intimate ceremony for the couple’s families.</p></article>
-          <article><span>02</span><h3>Guest Welcome</h3><p><strong>From 1:00 PM</strong><br />Arrival, warm greetings and beautiful reunions.</p></article>
-          <article><span>03</span><h3>Reception</h3><p><strong>Celebration</strong><br />Good food, joyful hearts and a room filled with love.</p></article>
-          <article><span>04</span><h3>Dance &amp; Merriment</h3><p><strong>Afterwards</strong><br />Music, laughter and memories we will carry forever.</p></article>
+        <div className="programme__paper">
+          <span className="programme__corner programme__corner--one" aria-hidden="true" />
+          <span className="programme__corner programme__corner--two" aria-hidden="true" />
+          <span className="programme__corner programme__corner--three" aria-hidden="true" />
+          <span className="programme__corner programme__corner--four" aria-hidden="true" />
+          <div className="programme__label-wrap">
+            <span aria-hidden="true" />
+            <p className="programme__label">The celebration unfolds</p>
+            <span aria-hidden="true" />
+          </div>
+          <div className="programme__items">
+            {orderOfDay.map((item, index) => (
+              <article className={index === orderOfDay.length - 1 ? "programme__item--finale" : ""} key={`${item.title}-${index}`}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3>{item.title}</h3>
+                  {item.note && <p>{item.note}</p>}
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -736,6 +862,44 @@ function LandingPage() {
             <span>02</span>
             <div><p className="section-eyebrow">For sharing</p><h3>Add what you captured</h3><p>Share your photographs and videos so everyone can enjoy the day through your eyes.</p><a className="button button--outline" href={MEMORIES_DRIVE_URL} target="_blank" rel="noreferrer">Upload photos &amp; videos</a><small>Google Drive access is required to upload files.</small></div>
           </article>
+        </div>
+      </section>
+
+      <section className="vendors section" id="vendors">
+        <div className="vendors__heading" data-reveal>
+          <div>
+            <p className="section-eyebrow">The people behind the celebration</p>
+            <h2>Our wedding vendors</h2>
+          </div>
+          <p>Meet the creative partners bringing every detail of the celebration to life.</p>
+        </div>
+        <div className="vendors__grid">
+          {vendors.map((vendor, index) => (
+            <article className={`vendor-card${vendor.featured ? " vendor-card--featured" : ""}`} key={vendor.category} data-reveal>
+              <span className="vendor-card__number">{String(index + 1).padStart(2, "0")}</span>
+              <div className={`vendor-card__image${vendor.isLogo ? " vendor-card__image--logo" : ""}`}>
+                <span aria-hidden="true">{vendor.initials}</span>
+                {vendor.image && (
+                  <img
+                    src={vendor.image}
+                    alt={`${vendor.category} by ${vendor.name}`}
+                    onError={(event) => { event.currentTarget.style.display = "none"; }}
+                  />
+                )}
+              </div>
+              <p>{vendor.category}</p>
+              <h3>{vendor.name}</h3>
+              {vendor.socials?.length > 0 && (
+                <div className="vendor-card__socials">
+                  {vendor.socials.map((social) => (
+                    <a className="vendor-card__handle" href={social.url} target="_blank" rel="noreferrer" key={social.label}>
+                      {social.label} <span aria-hidden="true">↗</span>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </article>
+          ))}
         </div>
       </section>
 
