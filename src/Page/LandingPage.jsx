@@ -57,10 +57,8 @@ const vendors = [
       { label: "@aijohicreates", url: "https://www.instagram.com/aijohicreates/" },
       { label: "@iamaijohi", url: "https://www.instagram.com/iamaijohi/" },
     ],
-    image: "/images/i-am-aijohi-logo.svg",
-    initials: "I AM\nAIJOHI",
+    initials: "WD",
     featured: true,
-    isLogo: true,
   },
   {
     category: "Photography",
@@ -92,9 +90,10 @@ const vendors = [
   },
   {
     category: "Makeup Artistry",
-    name: "Makeup Partner",
-    socials: [],
-    image: "/images/iom26-vendor-06.jpg",
+    name: "Veestudio",
+    socials: [
+      { label: "@veestudio5", url: "https://www.tiktok.com/@veestudio5" },
+    ],
     initials: "MA",
   },
   {

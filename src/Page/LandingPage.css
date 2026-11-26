@@ -648,7 +648,7 @@ body.modal-is-open, body.menu-is-open { overflow: hidden; }
 .vendor-card--featured { background: rgba(255,250,242,.84); }
 .vendor-card--featured .vendor-card__image { border: 1px solid rgba(223,197,129,.58); background: linear-gradient(145deg,var(--olive-950),var(--olive-700)); box-shadow: inset 0 0 0 8px rgba(223,197,129,.06); }
 .vendor-card--featured .vendor-card__image::before { position: absolute; inset: 11px; border: 1px solid rgba(223,197,129,.28); content: ""; }
-.vendor-card--featured .vendor-card__image > span { position: relative; z-index: 1; max-width: 150px; color: var(--gold-light); font-size: 28px; line-height: .82; letter-spacing: .14em; text-align: center; white-space: pre-line; }
+.vendor-card--featured .vendor-card__image > span { position: relative; z-index: 1; }
 .vendor-card--featured h3 { color: var(--olive-950); letter-spacing: .03em; }
 .vendor-card__socials { width: 100%; margin-top: auto; display: flex; align-items: flex-start; flex-direction: column; gap: 5px; }
 .vendor-card__socials .vendor-card__handle { margin-top: 0; }
